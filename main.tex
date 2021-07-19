@@ -1,0 +1,384 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{greek}
+
+\title{}
+\author{}
+\date{}
+
+\begin{document}
+
+\begin{center}
+Minor Project Report on 
+\end{center}
+
+\begin{center}
+\textbf{\huge Denoising Remotely Sensed Hyperspectral Image Using Autoencoder Technique}
+\end{center}
+
+\begin{center}
+\textbf{\large Kranti Kumari: 202SP011\\ Nikhil Bobate: 202SP017}
+\end{center}
+
+\begin{center}
+Under the guidance of \\ {\textbf{\large Dr. Raghavendra B.S.}}
+\end{center}
+
+\begin{center}
+\large Department of Electronics and Communication Engineering\\ National Institute of Technology, Surathkal\\  Karnataka-575025, India
+\end{center}
+
+\begin{center}
+\emph Date of Submission: 08-06-2021
+\end{center}
+
+\begin{center}
+in partial fulfillment for the award of the degree\\ of
+\end{center}
+
+\begin{center}
+\textbf{\large Master of Technology\\ In\\ Signal Processing and Machine Learning\\ At}
+\end{center}
+
+\begin{figure}[htp]
+    \centering
+    \Large\includegraphics[width=4cm]{NITK_logo.png}
+    \label{fig:logo1}
+\end{figure}
+
+\begin{center}
+\textbf{\large Department of Electronics and Communication Engineering\\
+National Institute of Technology Karnataka, Surathkal}
+\end{center}
+
+\newpage
+
+\begin{center}
+\large NATIONAL INSTITUTE OF TECHNOLOGY KARNATAKA
+\end{center}
+\begin{center}
+\textbf{\large Department of Electronics and Communication Engineering}
+\end{center}
+
+\begin{figure}[htp]
+    \centering
+    \Large\includegraphics[width=4cm]{NITK_logo.png}
+    \label{fig:logo2}
+\end{figure}
+
+\begin{center}
+\textbf{\Large CERTIFICATE}
+\end{center}
+
+\begin{center}
+\end{center}
+
+\large This is to certify that the project entitled \textbf{‘Denoising Remotely Sensed Hyperspectral Image Using Autoencoder Technique’, submitted by Kranti Kumari: 202SP011 and Nikhil Bobate: 202SP017} is a record of bonafide work carried out by them, in the partial fulfilment of the requirement for the award of Degree of M.Tech in Signal Processing and Machine Learning at National Institute of Technology Karnataka,Surathkal.
+
+
+\begin{center}
+\end{center}
+\begin{center}
+\end{center}
+
+
+\begin{flushleft}
+Dr. Raghavendra B.S.\\
+Assistant Professor\\
+Department of ECE\\
+NITK, Surathkal
+\end{flushleft}
+
+
+\newpage
+
+\begin{center}
+\textbf{\Large ACKNOWLEDGEMENT}
+\end{center}
+
+\begin{center}
+\end{center}
+\begin{center}
+\end{center}
+
+With immense pleasure we are presenting the ”Denoising Remotely Sensed Hyperspectral Image Using Autoencoder Technique” Project report as a part of the curriculum of ”EC788 - Minor Project” under the department of “Electronics and Communication Engineering, National Institute of Technology, Karnataka”. We wish to thank all people who gave us the unending support. We express our profound thanks to our Professor, Dr. Raghavendra B.S., and all those who have indirectly guided and helped us in the preparation of this project.
+
+\newpage
+
+\begin{flushleft}
+\textbf{\Large Contents}
+\end{flushleft}
+
+\begin{center}
+\end{center}
+
+\begin{flushleft}
+\textbf{1. Abstract} . . . . . . . . . . . . . . . . . . . . . . . . . . . 5\\
+\textbf{2. Introduction} . . . . . . . . . . . . . . . . . . . . . . . . . 5\\
+\textbf{3. Methodology} . . . . . . . . . . . . . . . . . . . . . . . . . 7\\
+\textbf{4. Results and Analysis} . . . . . . . . . . . . . . . . . . . . . 11\\
+\textbf{5. Conclusion} . . . . . . . . . . . . . . . . . . . . . . . . . . . 12\\
+\textbf{6. References} . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13\\
+\end{flushleft}
+
+
+\newpage
+
+
+\begin{flushleft}
+\textbf{\large 1. Abstract}
+\end{flushleft}
+
+Denoising is a fundamental task in hyperspectral image (HSI) processing that can improve the performance of classification, unmixing, and other subsequent applications. In an HSI, there is a large amount of local and global redundancy in its spatial domain that can be used to preserve the details and texture. In addition, the correlation of the spectral domain is another valuable property that can be utilized to obtain good results. This project aims at implementing denoising of HSI using stacked autoencoders, in which concept of deep neural network is used. Stacked autoencoder proved to be a better solution for noise reduction in Hyperspectral images with different noise densities.\\
+
+\textbf{Keywords:} Autoencoder, deep neural networks, Denoising, Hyper-spectral image, stacked autoencoder.\\
+
+
+
+\begin{flushleft}
+\textbf{\large 2. Introduction}
+\end{flushleft}
+
+Remote sensing has been substantially influenced by hyperspectral imaging in the past decades. Hyperspectral cameras provide contiguous electromagnetic spectra ranging from visible over near-infrared to shortwave infrared spectral bands (from 0.3 $\mu$m to 2.5 $\mu$m). The spectral signature is the consequence of molecular absorption and particle scattering, allowing to distinguish between materials with different characteristics. Hyperspectral remote sensing applications include agriculture, environmental monitoring, weather prediction, military, food industry, biomedical, and forensic research.\\
+
+HSI provides information through huge number of spectral channels. A typical application may need certain spectral bands of objects being observed. The spectral reflectance and absorption characteristics of matters or objects are to be known prior to analyzing the Hyperspectral data. The content, concentration, structure and constituents of the matter influence the spectral signature. The rate of degradation and depletion of resource has accelerated tremendously in view of ever increasing demographic pressure. Deforestation, desertification, soil erosion and salinisation have degraded the environment, threatening the food security and economic development of many countries. The HSI can be used to monitoring and management of the resources such as in the application of precision farming, mineral mapping and water (Inland, coastal and open ocean), military monitoring. The acquired HSI may affected from noise contamination, stripe corruption, calibration error, photon effect or mixture of various noises such as Gaussian, impulse noise or dead pixels or combinations of two or more specified.The quality of HSI degraded by various types of noise which in turn reduces the performance of the HSI processing tasks such as classification, spectral unmixing, segmentation and matching.
+
+A hyperspectral image (HSI) is a three dimensional (3D) datacube in which the first two dimensions represent spatial information and the third dimension represents the spectral information of a scene. Figure 1 shows an illustration of a hyperspectral datacube. Hyperspectral spaceborne sensors capture data in several narrow spectral bands, instead of a single wide spectral band. In this way, hyperspectral sensors can provide detailed spectral information from the scene. However, since the width of spectral bands significantly decreases, the received signal by the sensor also decreases. This leads to a trade-off between spatial resolution and spectral resolution. Therefore, to improve the spatial resolution of hyperspectral images, airborne imagery has been widely used.\\
+
+\begin{figure}[htp]
+    \centering
+    \Large\includegraphics[width=12cm, height=7cm]{HyperspectralImage.JPG}
+    \caption{\textbf{Left}: Hyperspectral data cube. \textbf{Right}: The reflectance of the material within a pixel.}
+    \label{fig:HyperspectralImage}
+\end{figure}
+
+
+In this project, we have used stacked autoencoders for denoising of HSI, in which concept of deep neural network is used. Particularly, the model is experimented to determine the degree of reconstruction of HSI image in which, it improves the perception quality of the inherent noisy bands and also reconstructs the normal bands with negligible changes. The method has been used to experiment the robustness of the model against input images with various quantity of noise.\\
+
+In this project, we have used AVIRIS Hyperspectral image of Indianpines as our dataset from Kaggle.\\
+
+\begin{flushleft}
+\textbf{\large 3. Methodology}
+\end{flushleft}
+
+The architectural diagram of the method is presented as shown in Fig 2, which takes the pixel vector P as an input to the network and train the autoencoder model in unsupervised manner to reconstruct the input pixel P, at the output O. To improve the robustness of the autoencoder model, the input pixel P is partially added with noise, which is denoted as $\tilde{P}$ is fed to the model while training. The autoencoder model is trained such a way that denoised P will be reconstructed by mapping $\tilde{P}$ to the P.\\
+
+The autoencoder model uses multilayer Back Propagation Artificial Neural Network to denoise the Hyperspectral images. This model has one visible input layer of L nodes, seven hidden layers of different number of nodes and one visible output layer of L nodes.\\
+
+
+\begin{figure}[htp]
+    \centering
+    \Large\includegraphics[width=12cm, height=4cm]{Architecture.JPG}
+    \caption{A Multi layer denoising autoencoder for HSI.}
+    \label{fig:Architecture}
+\end{figure}
+
+During data processing, the input pixel P of L bands maps to  the hidden layer $h_{1}$ by the  dimension p $\epsilon$ ${R}^2$ and get to hidden layer $h_{1}$ representation $h_{1}$ $\epsilon$ ${R}^K$, and then $h_{1}$ maps to latent space representation $h_{2}$ $\epsilon$ ${R}^K$. Similarly, latent space $h_{2}$ maps to $h_{3}$ by $h_{3}$ $\epsilon$ ${R}^N$ and so on. Finally the hidden layer $h_{7}$ ends at output layer as same size as the dimension of P that is O $\epsilon$ ${R}^L$ , which is called as reconstruction layer as presented in Fig 2. The computational procedure is expressed mathematically by referring the notation which are used in Fig 2.\\
+
+$h_{1net}$ = f($W_{h1}$, $b_{h1}$) . . . . . . . . . . . . . . . . . . . . . . . (1)
+where $h_{1net}$ = $b_{h1}$+ $\sum_{j=1}^L W_{j}P_{j}$ \\
+
+The activation function, Rectified Linear Unit (ReLU) is used to threshold the activation at zero, which accelerates the convergence of the stochastic gradient descent. The mathematical expression for ReLU is defined in eq (2) which is applied to all the nodes of hidden layers $h_{1}$, $h_{2}$ . . . . $h_{7}$.\\
+
+$h_{li}$ = f($h_{1net}$) = max(0, $h_{1net}$) . . . . . . . . . . . . . . . . . . (2)\\
+
+Similarly for successive layers:\\
+
+$h_{2}$ = f($W_{h2}$, $b_{h2}$) . . . . . . . . . . . . . . . . . . . . . . . . . . (3)\\
+
+$h_{3}$ = f($W_{h3}$, $b_{h3}$) . . . . . . . . . . . . . . . . . . . . . . . . . . (4)\\
+
+.\\
+
+.\\
+
+.\\
+
+$h_{7}$ = f($W_{h7}$, $b_{h7}$) . . . . . . . . . . . . . . . . . . . . . . . . . . (8)\\
+
+o = f($W_{o}$, $b_{o}$) . . . . . . . . . . . . . . . . . . . . . . . . . . . . (9)\\
+
+In the output layer, the activation function used is Sigmoidal function which is given in eq (10) , which softens the activation which is applied to all the nodes from $o_{1net}$ to $o_{Lnet}$. \\
+
+$O_{i}$ = f($O_{inet}$) = $\frac{1}{1 + e^{-{O_{inet}}}}$ . . . . . . . . . . . . . . . . . . . . . (10)\\
+
+where, $O_{inet}$ = $b_{o1}$ + $\sum_{j=1}^N W_{j}h_{3j}$ for all L nodes and $b_{o1}$ is the
+bias at output layer. \\
+
+The main intention of training the model is to minimize the reconstruction error between input p and output pixel o, where C is a Cost function or Loss function, which is given as in eq (11). The Binary Cross Entropy is used as loss function which is expressed in eq (12).\\
+
+p, o = argmin[C($p^i$, $o^i$)] . . . . . . . . . . . . . . . . . . . . . . . (11)\\
+
+C(w, b) = $\frac{-1}{2n}$ $\sum_{p}$ [p*log(o) + (1-p)*log(1-o)] . . . . . . . . . (12)\\
+
+where, w is the set of all weights, b is the biases, n is the number of training samples , p is the set of input and o is the actual output for the input p. \\
+
+
+The \textbf{steps} involved in the training and testing of denoising autoencoder are listed as below:\\
+
+\begin{flushleft}
+\textbf{Step I: Preparation of the Dataset:}
+\end{flushleft}
+
+\begin{enumerate}
+
+\item Normalize all the pixel value of the image that is scale down the pixel value [0-255] to [0.0-1.0]
+\item Choose any particular band add Gaussian Noise in certain percentage from 0\% to 100\%.
+\item Read the Hyperspectral image of the size Row R x Column C x Bands L, pixel by pixel as a training sample.
+\item Split the RxC number of pixels in the ratio of 8:2, in which 80\% of pixels will be used for training and remaining 20\% for testing purpose.\\
+
+\end{enumerate}
+
+\begin{flushleft}
+\textbf{Step II: Building of the Network:}
+\end{flushleft}
+
+\begin{enumerate}
+
+\item Create feed-forward multi layer network with L inputs, hidden layer $h_{1}$, $h_{2}$, $h_{3}$ ... $h_{7}$ and o with different number of nodes respectively as shown in Figure 2.
+\item The ReLU activation function as in eq. (2) is set to all the nodes of hidden layers and Sigmoidal activation function as in eq. (10) is set to output layer o. \\
+
+\end{enumerate}
+
+\begin{flushleft}
+\textbf{Step III: Initialization of the Model:}
+\end{flushleft}
+
+\begin{enumerate}
+
+\item Build the layers using keras
+\item Initialize the learning rate to $10^{-2}$.
+\item Set the Loss function as given in eq.(12) and the optimizer.\\
+
+\end{enumerate}
+
+\begin{flushleft}
+\textbf{Step IV: Training:}
+\end{flushleft}
+
+\begin{enumerate}
+
+\item Until the termination condition is met, Do
+\item For each epoch, Do
+\item Input the pixel p to the network and compute the $o_{i}$ of every unit i in the network.
+\item Run the model for 100 epochs having batch size of 20.
+\item Validate the model using test samples.\\
+
+\end{enumerate}
+
+
+\begin{flushleft}
+\textbf{Step I: Testing:}
+\end{flushleft}
+
+\begin{enumerate}
+
+\item Consider testing sample pixels and feed them to the network as described in step 4. The weights of the network should not be updated.
+\item The actual output is compared with the input pixel vector. The error is computed.\\
+
+\end{enumerate}
+
+The model is ready with the optimized weights, can be used for application.
+Then, the noisy images can be fed to the model and obtained denoised images.\\
+
+
+\begin{flushleft}
+\textbf{\large 4. Results and Analysis}
+\end{flushleft}
+
+In this model, the denoising stacked auto encoder network has been built with one input layer with 21025 nodes, 7 hidden layers with 256, 128, 64, 32, 64, 128, 256 nodes and output layer with 21025 nodes. About 21000 sample pixels are shuffled and consequently divided as training data, testing data with a ratio 8:2. The training data are used for updating of weights and testing data is used for algorithm evaluation. In the experiment, Binary cross entropy loss function is used for computing the error. The learning rate has been tuned in the range between $10^{-2}$ to $10^{-6}$. \\
+
+For experimentation, AVIRIS Hyperspectral image of Indianpines is applied to assess the model of denoising HSI by auto encoder technique. This image has been collected over 2 miles by 2 miles area (contains 145x145 pixels) of the Indianpines test site in north-west Indiana, USA. It has spatial resolution of 20m with 224 spectral bands in the wavelength range 400nm to 2500nm.\\
+
+The method is tested by PSNR as metrics to measure the quality of the reconstructed image, which are given in equation (13) and (14).Peak Signal to Noise Ratio is the ratio if maximum power of the signal and the power of unnecessary distorting noise.\\
+
+PSNR = 20 * $\log_{10}{[\frac{255}{\sqrt{MSE}}}]$ . . . . . . . . . . . . . . . . . . . . (13)\\
+where\\
+
+MSE = $\frac{1}{RC}\sum_{Y=1}^R \sum_{X=1}^C [I_{ip}(X,Y) - I_{rcon}(X,Y)]^2$ . . . . . . (14)\\
+
+where, R-Number of Rows; C- Number of Columns, $I_{ip}$ - Input image band, $I_{rcon}$ - Reconstructed Image band.\\
+
+Table 1 shows the PSNR value of Reconstructed images without external noise addition:\\
+
+\begin{center}
+    \def\arraystretch{1.5}% 
+    \begin{tabular}{ | l | l |}
+    \hline
+        \textbf{Bands} & \textbf{PSNR Value}\\
+    \hline
+        Band 1  &  99.86481878919308\\
+    \hline
+        Band 2  &  100.11729195808896\\
+    \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+Table 1: PSNR value of Reconstructed images without external noise\\
+\end{center}
+
+
+Table 2 shows the PSNR value of Reconstructed images with gaussian noise addition:\\
+
+\begin{center}
+    \def\arraystretch{1.5}% 
+    \begin{tabular}{ | l | l |}
+    \hline
+        \textbf{Bands} & \textbf{PSNR Value}\\
+    \hline
+        \textbf{Band 112}  &  75.8257894404204\\
+    \hline
+        \textbf{Band 115}  &  75.36198564332165\\
+    \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+Table 2: PSNR value of Reconstructed images with external noise\\
+\end{center}
+
+Figure 3 and 4 Shows the output that we got from our model.\\
+
+\begin{figure}[htp]
+    \centering
+    \Large\includegraphics[width=12cm, height=8cm]{OrigBands.JPG}
+    \caption{Reconstruction of normal bands (a) and (b) Original Image, (c) and (d) Reconstructed Image}
+    \label{fig:OrigBands}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \Large\includegraphics[width=12cm, height=8cm]{NoisyBands.JPG}
+    \caption{Reconstruction of Noisy bands (a) and (b) Original Image, (c) and (d) Reconstructed Image}
+    \label{fig:NoisyBands}
+\end{figure}
+
+\newpage
+
+\begin{flushleft}
+\textbf{\large 6. Conclusion}
+\end{flushleft}
+
+A novel method for reconstruction and denoising of Hyperspectral image using stacked autoencoder which uses deep neural network is presented. The experimental result shows that, the method improves the perception quality of the reconstructed, noisy bands. It is also shown that, normal bands are reconstructed with high PSNR value. The experiment also proved that, the proposed model is more robust to the noisy input. Hence without using any conventional filters in the model, the noise in the image is reduced without affecting the neighbour bands. Therefore the information across spectral bands is preserved.\\
+
+
+\begin{flushleft}
+\textbf{\large 8. References}
+\end{flushleft}
+
+[1] A Novel Method for Denoising Remotely Sensed Hyperspectral Image Using Autoencoder Technique by Shivakumar B R, Dr. Prakash J. International Journal of Applied Engineering Research ISSN 0973-4562 Volume 13, Number 20 (2018) pp. 14733-14740\\
+
+[2] Baumgardner, M. F., Biehl, L. L., Landgrebe, D. A. (2015). 220 Band AVIRIS Hyperspectral Image Data Set:June12,1992 Indian Pine Test Site 3. Purdue University Research Repository.\\
+
+[3] $https://en.wikipedia.org/wiki/Hyperspectral\_imaging$
+
+
+\end{document}
